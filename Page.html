@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <base target="_top">
+</head>
+
+<body>
+  <table>
+    <thead>
+      <tr>
+        <th scope="col">
+          Fecha
+        </th>
+        <th scope="col">
+          Hora
+        </th>
+        <th scope="col">
+          SKU
+        </th>
+        <th scope="col">
+          Descripción
+        </th>
+        <th scope="col">
+          Cantidad
+        </th>
+        <th scope="col">
+          Costo Neto
+        </th>
+        <th scope="col">
+          Ubicación
+        </th>
+        <th scope="col">
+          Dividir
+        </th>
+      </tr>
+    </thead>
+    <tbody>
+      <? for (item of data.items) { ?>
+        <tr>
+          <td>
+            <?= data.documentInfo.fechaEmision ?>
+          </td>
+          <td>
+            <?= data.documentInfo.horaCarga ?>
+          </td>
+          <td>
+            <?= item.petporium_sku ?>
+          </td>
+          <td>
+            <?= item.description ?>
+          </td>
+          <td>
+            <?= item.quantity ?>
+          </td>
+          <td>
+            <?= item.net_cost ?>
+          </td>
+
+          <td>
+            <input type="checkbox" name="full" checked />
+            <label for="full">FULL</label>
+          </td>
+          <td>
+              <button>
+                Dividir
+              </button>
+            </td>
+
+        </tr>
+        <? if (item.variations !== null) { 
+            item.variations.forEach(variation => { ?>
+          <tr>
+            <td>
+              
+            </td>
+            <td>
+              
+            </td>
+            <td>
+              <?= variation.sku_petporium ?>
+            </td>
+            <td>
+              <?= variation.description ?>
+            </td>
+            <td>
+              <input type="text" value="0">
+            </td>
+            <td>
+              
+            </td>
+
+            <td>
+              <input type="checkbox" name="full" checked />
+              <label for="full">FULL</label>
+            </td>
+            <td>
+              <button>
+                Dividir
+              </button>
+            </td>
+          </tr>
+          <? }) ?>
+        <? } ?>
+      <? } ?>
+    </tbody>
+  </table>
+</body>
+
+</html>
