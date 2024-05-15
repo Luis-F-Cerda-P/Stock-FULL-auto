@@ -4,85 +4,77 @@
 <head>
   <base target="_top">
   <!-- <link rel="stylesheet" href="https://cdn.simplecss.org/simple.min.css"> -->
-  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet"
+    integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
 </head>
 
 <body>
-  <table class="table">
-    <thead>
-      <tr>
-        <th scope="col">
-          Fecha
-        </th>
-        <th scope="col">
-          Hora
-        </th>
-        <th scope="col">
-          SKU
-        </th>
-        <th scope="col">
-          Descripción
-        </th>
-        <th scope="col">
-          Cantidad
-        </th>
-        <th scope="col">
-          Costo Unidad
-        </th>
+  <form id="goods-entry-data">
+    <label for="">Fecha:</label>
+    <input disabled type="text" name="" id="" value="<?= data.documentInfo.fechaEmision ?>">
+    <label for="">Hora:</label>
+    <input disabled type="text" name="" id="" value="<?= data.documentInfo.horaCarga ?>">
+    <label for="">Nro. Factura:</label>
+    <input disabled type="text" name="" id="" value="<?= data.documentInfo.nroFactura ?>">
 
-      </tr>
-    </thead>
-    <tbody>
-      <? for (item of data.items) { ?>
-        <tr>
-          <td>
-            <?= data.documentInfo.fechaEmision ?>
-          </td>
-          <td>
-            <?= data.documentInfo.horaCarga ?>
-          </td>
+    <table class="table">
+      <thead>
+        <tr class="sticky-top">
+          <th scope="col">
+            Cód. de Barras
+          </th>
+          <th scope="col">
+            Descripción
+          </th>
+          <th scope="col">
+            Cantidad
+          </th>
+          <th scope="col">
+            Costo Unidad
+          </th>
+
+        </tr>
+      </thead>
+      <tbody>
+        <? for (item of data.items) { ?>
+        <tr data-product-code="<?= item.petporium_sku ?>" data-main-variation="true">
           <td>
             <?= item.petporium_sku ?>
           </td>
-          <td>
+          <td class="nombre">
             <?= item.description ?>
           </td>
           <td>
-            <input type="text" value="<?=item.quantity?>"/>
-            
+            <input type="text" value="<?=item.quantity?>" />
+
           </td>
           <td>
-            $ <?= item.net_cost ?>
+            <?= item.net_cost_formatted?>
           </td>
 
         </tr>
         <? if (item.variations !== null) { 
-            item.variations.forEach(variation => { ?>
-          <tr>
-            <td>
-              
-            </td>
-            <td>
-              
-            </td>
-            <td>
-              <?= variation.sku_petporium ?>
-            </td>
-            <td>
-              <?= variation.description ?>
-            </td>
-            <td>
-              <input type="text" value="0">
-            </td>
-            <td>
-              
-            </td>
-          </tr>
-          <? }) ?>
+                item.variations.forEach(variation => { ?>
+        <tr data-product-code="<?= item.petporium_sku ?>" data-main-variation="false">
+          <td>
+            <!-- <?= variation.sku_petporium ?> -->
+          </td>
+          <td class="nombre"><?= variation.description ?></td>
+          <td>
+            <input type="text" value="0">
+          </td>
+          <td>
+
+          </td>
+        </tr>
+        <? }) ?>
         <? } ?>
-      <? } ?>
-    </tbody>
-  </table>
+        <? } ?>
+      </tbody>
+    </table>
+    <input type="submit" value="Submit" />
+  </form>
+
 
   <?!= include('script'); ?>
 

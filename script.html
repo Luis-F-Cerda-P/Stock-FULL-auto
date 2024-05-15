@@ -1,3 +1,42 @@
 <script>
-  console.log("Funcioné")
+  function preventFormSubmit() {
+    var forms = document.querySelectorAll('form');
+    for (var i = 0; i < forms.length; i++) {
+      forms[i].addEventListener('submit', function (event) {
+        event.preventDefault();
+        const allIsOk = [];
+        const allRows = Array.from(document.querySelectorAll("tr"))
+        const rowsThatNeedValidation = allRows.filter(myrow => myrow.dataset.mainVariation === "true" &&
+          allRows.filter(allrow => allrow.dataset.productCode === myrow.dataset.productCode).length > 1
+        )
+        rowsThatNeedValidation.forEach(row => {
+          const variationsExpectedTotal = parseInt(row.querySelector("input").value)
+          const variations = Array.from(document.querySelectorAll("tr[data-product-code='" + row.dataset.productCode + "'][data-main-variation='false'] input"))
+          const variationsActualTotal = variations.reduce((acc, variation) => acc + parseInt(variation.value), 0)
+
+          const quantitiesMatch = variationsExpectedTotal === variationsActualTotal
+          allIsOk.push(quantitiesMatch);
+          if (quantitiesMatch) {
+            console.log("OK para " + row.dataset.productCode)
+            variations.forEach(badElement => badElement.parentElement.parentElement.classList.remove("table-danger"))
+          } else {
+            variations.forEach(badElement => badElement.parentElement.parentElement.classList.add("table-danger"))
+            alert('La suma de las cantidades para las variaciones de ' + row.querySelector("td.nombre").textContent.trim() + ' no encajan');
+          }
+        })
+
+        if (allIsOk.every(check => check === true)) {
+          console.log("this:\n", this)
+          handleFormSubmit(this); 
+
+        }
+      });
+    }
+  }
+
+  function handleFormSubmit(formObject) {
+    console.log(formObject)
+  }
+  window.addEventListener('load', preventFormSubmit);
+
 </script>

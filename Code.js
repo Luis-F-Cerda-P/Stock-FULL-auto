@@ -22,7 +22,7 @@ function showDialog(bsaleData) {
     .setWidth(1000)
     .setHeight(600);
   SpreadsheetApp.getUi() // Or DocumentApp or SlidesApp or FormApp.
-    .showModalDialog(output, 'My custom dialog');
+    .showModalDialog(output, 'Ingreso al inventario de FULL⚡');
 }
 
 function bsaleLink() {
@@ -85,6 +85,14 @@ function captureSubstring(inputString, startString, endString) {
 // el 12vo div dentro del div.header_0 trae la fecha de emisión de la factura
 // 
 function getTheDataFromBsale(urlOfDocument) {
+  function intToCurrencyString(number) {
+    const formattedNumber = new Intl.NumberFormat('es-CL', {
+      style: 'currency',
+      currency: 'CLP'
+    }).format(number);
+
+    return formattedNumber
+  }
   function currencyStringToInt(inputString) {
     return parseInt(inputString.replace(/[^\d]/g, ''));
   }
@@ -122,9 +130,9 @@ function getTheDataFromBsale(urlOfDocument) {
   const fechaEmision = dataMembrete[11]
   const nroFactura = dataMembrete[13];
   const date = new Date(); // Create a new Date object, which defaults to the current date and time
-  const hours = date.getHours(); // Get the hours component of the date
-  const minutes = date.getMinutes(); // Get the minutes component of the date
-  const horaCarga = hours + ":" + minutes.toString().padStart(2, "0") + ":" + "00";
+  const hours = date.getHours().toString().padStart(2, "0"); // Get the hours component of the date
+  const minutes = date.getMinutes().toString().padStart(2, "0"); // Get the minutes component of the date
+  const horaCarga = hours + ":" + minutes + ":" + "00";
 
   const itemsInTable = $("tr.detail_list label");
   const data = []
@@ -148,6 +156,7 @@ function getTheDataFromBsale(urlOfDocument) {
     const cost = currencyStringToInt(data[subI + 3]);
     const discount = percentageStringToFloat(data[subI + 4]);
     const net_cost = Math.round(cost * (1 - discount))
+    const net_cost_formatted = intToCurrencyString(net_cost)
     const total = currencyStringToInt(data[subI + 5]);
 
     processedData.items[i] = {
@@ -157,6 +166,7 @@ function getTheDataFromBsale(urlOfDocument) {
       cost,
       discount,
       net_cost,
+      net_cost_formatted,
       total
     }
   }
