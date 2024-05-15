@@ -7,6 +7,10 @@ function onOpen() {
     .addToUi();
 }
 
+function include(fileName) {
+  return HtmlService.createHtmlOutputFromFile(fileName).getContent()
+}
+
 function showDialog(bsaleData) {
   var html = HtmlService.createTemplateFromFile('Page')
   var code = html.getCode();
@@ -120,7 +124,7 @@ function getTheDataFromBsale(urlOfDocument) {
   const date = new Date(); // Create a new Date object, which defaults to the current date and time
   const hours = date.getHours(); // Get the hours component of the date
   const minutes = date.getMinutes(); // Get the minutes component of the date
-  const horaCarga = hours + ":" + minutes + ":" + "00";
+  const horaCarga = hours + ":" + minutes.toString().padStart(2, "0") + ":" + "00";
 
   const itemsInTable = $("tr.detail_list label");
   const data = []
