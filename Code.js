@@ -192,25 +192,7 @@ function getCatalogData() {
 }
 
 function makeBsaleDataAccountForVariations(bsaleData, catalogData) {
-  // CATALOG DATA: 
-  //   return {
-  //     ean: row[0],
-  //     sku_petcounter: row[1],
-  //     sku_petporium: row[2],
-  //     description: row[3],
-  //   } 
-  // BSALE DATA:
-  //   processedData.items[i] = {
-  //     quantity,
-  //     petcounter_sku,
-  //     petcounter_desc,
-  //     cost,
-  //     discount,
-  //     net_cost,
-  //     total
-  //   }
-
-  // const petcounterSkusInBill = bsaleData.items.map((item) => item.petcounter_sku)
+  ll = bsaleData.items.map((item) => item.petcounter_sku)
   const insertionData = JSON.parse(JSON.stringify(bsaleData));
   insertionData.items.forEach(item => {
     const variations = catalogData.filter(catalogItem => catalogItem.sku_petcounter === item.petcounter_sku);
@@ -226,9 +208,11 @@ function makeBsaleDataAccountForVariations(bsaleData, catalogData) {
     }
   })
 
-  // console.log(insertionData)
-
   return insertionData;
+}
+
+function processForm(formObject) {
+  Logger.log(formObject)
 }
 
 function debugging() {

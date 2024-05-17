@@ -27,7 +27,7 @@
 
         if (allIsOk.every(check => check === true)) {
           console.log("this:\n", this)
-          handleFormSubmit(this); 
+          handleFormSubmit(this);
 
         }
       });
@@ -35,8 +35,25 @@
   }
 
   function handleFormSubmit(formObject) {
-    console.log(formObject)
+    const nombres =
+      Array.from(
+        formObject
+          .querySelectorAll("td.nombre"))
+        .map(x => x.textContent.trim())
+
+    // Procesar el formObject 
+    // Producir otro objeto con la data limpia
+    // Limpiar la data implica: 
+    // - Excluir los 'códigos madre'
+    // - Agrupar todo en un objeto
+    // - Las llaves son las "columnas"
+    // - Dichas llaves contienen arrays del mismo largo 
+    // - Se procesan con un simple 'for' que usa el 'i' para agrupar las cosas
+    // - Usar LockService porque luego podríamos usarlo entre varios
+    console.log(nombres)
+    // google.script.run.processForm(formObject);
   }
+
   window.addEventListener('load', preventFormSubmit);
 
 </script>

@@ -10,12 +10,15 @@
 
 <body>
   <form id="goods-entry-data">
-    <label for="">Fecha:</label>
-    <input disabled type="text" name="" id="" value="<?= data.documentInfo.fechaEmision ?>">
+    <p>Fecha: <?= data.documentInfo.fechaEmision ?></p>
+    <p>Hora: <?= data.documentInfo.horaCarga ?></p>
+    <p>Nro. Factura: <?= data.documentInfo.nroFactura ?></p>
+    <!-- <label for="">Fecha:</label>
+    <input type="text" name="fecha" id="" value="<?= data.documentInfo.fechaEmision ?>">
     <label for="">Hora:</label>
-    <input disabled type="text" name="" id="" value="<?= data.documentInfo.horaCarga ?>">
+    <input disabled type="text" name="horaCarga" id="" value="<?= data.documentInfo.horaCarga ?>">
     <label for="">Nro. Factura:</label>
-    <input disabled type="text" name="" id="" value="<?= data.documentInfo.nroFactura ?>">
+    <input disabled type="text" name="nroFactura" id="" value="<?= data.documentInfo.nroFactura ?>"> -->
 
     <table class="table">
       <thead>
@@ -45,7 +48,7 @@
             <?= item.description ?>
           </td>
           <td>
-            <input type="text" value="<?=item.quantity?>" />
+            <input type="text" name="quantity" value="<?=item.quantity?>" />
 
           </td>
           <td>
@@ -61,7 +64,7 @@
           </td>
           <td class="nombre"><?= variation.description ?></td>
           <td>
-            <input type="text" value="0">
+            <input name="quantity" type="text" value="0">
           </td>
           <td>
 
