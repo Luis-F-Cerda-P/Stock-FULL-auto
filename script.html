@@ -35,11 +35,38 @@
   }
 
   function handleFormSubmit(formObject) {
-    const nombres =
-      Array.from(
-        formObject
-          .querySelectorAll("td.nombre"))
-        .map(x => x.textContent.trim())
+    const rows = Array.from(document.querySelectorAll("tr"))
+    const payload = {sku:[],
+       description:[],
+       quantity:[],
+       net_cost:[]}
+    rows.forEach((row, index, allRows) => {
+      for (let i = 0; i < row.children.length; i++) {
+        const cell = row.children[i];
+        switch (i) {
+          case 0:
+            payload.sku.push(cell.textContent.trim())
+            break;
+          case 1:
+            payload.description.push(cell.textContent.trim())
+            break;
+          case 2:
+            payload.quantity.push(cell.textContent.trim())
+            break;
+          case 3:
+            console.log("The value: ", cell.dataset.value);
+            payload.net_cost.push(parseInt(cell.dataset.value))
+            break;
+          default:
+            break;
+        }
+        
+      }
+
+      
+    })
+    
+    console.log(payload);
 
     // Procesar el formObject 
     // Producir otro objeto con la data limpia
@@ -50,7 +77,7 @@
     // - Dichas llaves contienen arrays del mismo largo 
     // - Se procesan con un simple 'for' que usa el 'i' para agrupar las cosas
     // - Usar LockService porque luego podríamos usarlo entre varios
-    console.log(nombres)
+    // console.log(nombres)
     // google.script.run.processForm(formObject);
   }
 

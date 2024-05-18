@@ -13,12 +13,6 @@
     <p>Fecha: <?= data.documentInfo.fechaEmision ?></p>
     <p>Hora: <?= data.documentInfo.horaCarga ?></p>
     <p>Nro. Factura: <?= data.documentInfo.nroFactura ?></p>
-    <!-- <label for="">Fecha:</label>
-    <input type="text" name="fecha" id="" value="<?= data.documentInfo.fechaEmision ?>">
-    <label for="">Hora:</label>
-    <input disabled type="text" name="horaCarga" id="" value="<?= data.documentInfo.horaCarga ?>">
-    <label for="">Nro. Factura:</label>
-    <input disabled type="text" name="nroFactura" id="" value="<?= data.documentInfo.nroFactura ?>"> -->
 
     <table class="table">
       <thead>
@@ -51,14 +45,14 @@
             <input type="text" name="quantity" value="<?=item.quantity?>" />
 
           </td>
-          <td>
+          <td class="cost" data-value="<?= item.net_cost ?>">
             <?= item.net_cost_formatted?>
           </td>
 
         </tr>
         <? if (item.variations !== null) { 
                 item.variations.forEach(variation => { ?>
-        <tr data-product-code="<?= item.petporium_sku ?>" data-main-variation="false">
+        <tr data-parent-code="<?= item.petporium_sku ?>" data-product-code="<?= item.petporium_sku ?>" data-main-variation="false">
           <td>
             <!-- <?= variation.sku_petporium ?> -->
           </td>
@@ -78,7 +72,10 @@
     <input type="submit" value="Submit" />
   </form>
 
-
+  <script>
+    var myData = JSON.parse("<?= JSON.stringify(data) ?>");
+    console.log(myData);
+  </script>
   <?!= include('script'); ?>
 
 </body>
