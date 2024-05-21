@@ -10,9 +10,15 @@
 
 <body>
   <form id="goods-entry-data">
-    <p>Fecha: <?= data.documentInfo.fechaEmision ?></p>
-    <p>Hora: <?= data.documentInfo.horaCarga ?></p>
-    <p>Nro. Factura: <?= data.documentInfo.nroFactura ?></p>
+    <p>Fecha:
+      <?= data.documentInfo.fechaEmision ?>
+    </p>
+    <p>Hora:
+      <?= data.documentInfo.horaCarga ?>
+    </p>
+    <p>Nro. Factura:
+      <?= data.documentInfo.nroFactura ?>
+    </p>
 
     <table class="table">
       <thead>
@@ -34,8 +40,12 @@
       </thead>
       <tbody>
         <? for (item of data.items) { ?>
+        <? if (item.variations !== null) { ?>
         <tr data-product-code="<?= item.petporium_sku ?>" data-main-variation="true">
-          <td>
+          <?} else { ?>
+        <tr data-product-code="<?= item.petporium_sku ?>">
+          <? } ?>
+          <td data-product-code="<?= item.petporium_sku ?>">
             <?= item.petporium_sku ?>
           </td>
           <td class="nombre">
@@ -52,15 +62,16 @@
         </tr>
         <? if (item.variations !== null) { 
                 item.variations.forEach(variation => { ?>
-        <tr data-parent-code="<?= item.petporium_sku ?>" data-product-code="<?= item.petporium_sku ?>" data-main-variation="false">
-          <td>
-            <!-- <?= variation.sku_petporium ?> -->
+        <tr>
+          <td data-product-code="<?= variation.sku_petporium ?>">
           </td>
-          <td class="nombre"><?= variation.description ?></td>
+          <td class="nombre">
+            <?= variation.description ?>
+          </td>
           <td>
             <input name="quantity" type="text" value="0">
           </td>
-          <td>
+          <td data-value="<?= item.net_cost ?>">
 
           </td>
         </tr>

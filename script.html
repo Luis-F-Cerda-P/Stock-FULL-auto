@@ -26,7 +26,6 @@
         })
 
         if (allIsOk.every(check => check === true)) {
-          console.log("this:\n", this)
           handleFormSubmit(this);
 
         }
@@ -35,37 +34,46 @@
   }
 
   function handleFormSubmit(formObject) {
-    const rows = Array.from(document.querySelectorAll("tr"))
-    const payload = {sku:[],
-       description:[],
-       quantity:[],
-       net_cost:[]}
+    const rows = Array.from(document.querySelectorAll("tbody tr"))
+    const payload = {
+      sku: [],
+      description: [],
+      quantity: [],
+      net_cost: [],
+    }
+
     rows.forEach((row, index, allRows) => {
       for (let i = 0; i < row.children.length; i++) {
+        if (row.dataset.mainVariation) {
+          return
+        }
         const cell = row.children[i];
         switch (i) {
           case 0:
-            payload.sku.push(cell.textContent.trim())
+            payload.sku.push(cell.dataset.productCode.trim())
             break;
           case 1:
             payload.description.push(cell.textContent.trim())
             break;
           case 2:
-            payload.quantity.push(cell.textContent.trim())
+            payload.quantity.push(parseInt(cell.children[0].value))
             break;
           case 3:
-            console.log("The value: ", cell.dataset.value);
             payload.net_cost.push(parseInt(cell.dataset.value))
             break;
           default:
             break;
         }
+
         
+
       }
 
-      
+
     })
+
     
+
     console.log(payload);
 
     // Procesar el formObject 
