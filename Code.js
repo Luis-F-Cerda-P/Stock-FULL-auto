@@ -1,3 +1,4 @@
+// link a la hoja: https://docs.google.com/spreadsheets/d/10-Y2oNty9s66rskMrJ-XARkoX11tk1g5108vbLvLv54/edit#gid=939148300
 function onOpen() {
   SpreadsheetApp.getUi() // Or DocumentApp or SlidesApp or FormApp.
     // TODO: Acción "Ingreso desde Factura" con submenú "Bsale", "Sii"

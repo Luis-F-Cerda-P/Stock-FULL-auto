@@ -34,8 +34,18 @@
   }
 
   function handleFormSubmit(formObject) {
+    const documentInfoRaw = Array.from(document.querySelectorAll("form>p"))
+    const documentInfo = documentInfoRaw.reduce((acc, element) => {
+      const text = element.textContent
+      const splitPoint = text.indexOf(":")
+      const key = text.slice(0, splitPoint).trim().toLowerCase()
+      const value = text.slice(splitPoint + 1).trim()
+      acc[key] = value
+      return acc
+    }, {})
     const rows = Array.from(document.querySelectorAll("tbody tr"))
     const payload = {
+      document: documentInfo,
       sku: [],
       description: [],
       quantity: [],
@@ -45,6 +55,9 @@
     rows.forEach((row, index, allRows) => {
       for (let i = 0; i < row.children.length; i++) {
         if (row.dataset.mainVariation) {
+          return
+        }
+        if (row.children[2].children[0].value === "0") {
           return
         }
         const cell = row.children[i];
@@ -64,15 +77,13 @@
           default:
             break;
         }
-
-        
-
       }
-
-
     })
-
     
+    
+    google.script.run.withSuccessHandler(exitoEnCarga).processForm(formObject);
+
+
 
     console.log(payload);
 
