@@ -34,6 +34,10 @@
   }
 
   function handleFormSubmit(formObject) {
+    function submitOk() {
+      google.script.host.close()
+    }
+
     const documentInfoRaw = Array.from(document.querySelectorAll("form>p"))
     const documentInfo = documentInfoRaw.reduce((acc, element) => {
       const text = element.textContent
@@ -80,24 +84,9 @@
       }
     })
     
-    
-    google.script.run.withSuccessHandler(exitoEnCarga).processForm(formObject);
-
-
-
+    // document.getElementsByTagName("body")[0].innerHTML = "Enviado!"
     console.log(payload);
-
-    // Procesar el formObject 
-    // Producir otro objeto con la data limpia
-    // Limpiar la data implica: 
-    // - Excluir los 'códigos madre'
-    // - Agrupar todo en un objeto
-    // - Las llaves son las "columnas"
-    // - Dichas llaves contienen arrays del mismo largo 
-    // - Se procesan con un simple 'for' que usa el 'i' para agrupar las cosas
-    // - Usar LockService porque luego podríamos usarlo entre varios
-    // console.log(nombres)
-    // google.script.run.processForm(formObject);
+    google.script.run.withSuccessHandler(submitOk).processEntryForm(payload);
   }
 
   window.addEventListener('load', preventFormSubmit);

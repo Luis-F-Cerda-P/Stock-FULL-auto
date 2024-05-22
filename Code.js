@@ -83,9 +83,8 @@ function captureSubstring(inputString, startString, endString) {
 
 }
 
-// el 12vo div dentro del div.header_0 trae la fecha de emisión de la factura
-// 
 function getTheDataFromBsale(urlOfDocument) {
+  // el 12vo div dentro del div.header_0 trae la fecha de emisión de la factura
   function intToCurrencyString(number) {
     const formattedNumber = new Intl.NumberFormat('es-CL', {
       style: 'currency',
@@ -205,15 +204,37 @@ function makeBsaleDataAccountForVariations(bsaleData, catalogData) {
     if (variations.length > 0) {
       item.variations = variations;
     } else {
-      item.variations = null; 
+      item.variations = null;
     }
   })
 
   return insertionData;
 }
 
-function processForm(formObject) {
-  Logger.log(formObject)
+function processEntryForm(payloadFromFront) {
+  const movementsSheet = SpreadsheetApp.getActiveSpreadsheet().getSheetByName("Movimientos")
+  const currentDataInSheet = movementsSheet.getRange(1, 1).getDataRegion()
+  const columns = currentDataInSheet.getLastColumn()
+  const rows = currentDataInSheet.getLastRow()
+  const numberOfRows = payloadFromFront.sku.length
+  const entryTimeString = payloadFromFront.document.fecha + " " + payloadFromFront.document.hora
+  const documentNumber = payloadFromFront.document["nro. factura"]
+  const entryMatrix = []
+
+  for (let i = 0; i < numberOfRows; i++) {
+    const newRow = [
+      entryTimeString,
+      documentNumber,
+      payloadFromFront.sku[i],
+      payloadFromFront.description[i],
+      payloadFromFront.quantity[i],
+      payloadFromFront.net_cost[i],
+    ]
+
+    entryMatrix[i] = newRow
+  }
+
+  movementsSheet.getRange(rows+1, 1, numberOfRows, columns).setValues(entryMatrix)
 }
 
 function debugging() {
