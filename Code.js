@@ -4,7 +4,7 @@ function onOpen() {
     // TODO: Acción "Ingreso desde Factura" con submenú "Bsale", "Sii"
     .createMenu('Acciones')
     .addItem('Cargar Factura Bsale', 'bsaleLink')
-    .addItem('Cargar Factura Sii', 'siiLink')
+    .addItem('Carga Manual', 'showManualLoadDialog')
     .addToUi();
 }
 
@@ -12,7 +12,7 @@ function include(fileName) {
   return HtmlService.createHtmlOutputFromFile(fileName).getContent()
 }
 
-function showDialog(bsaleData) {
+function showBsaleDialog(bsaleData) {
   var html = HtmlService.createTemplateFromFile('Page')
   var code = html.getCode();
   Logger.log(code)
@@ -44,7 +44,7 @@ function bsaleLink() {
     const catalogData = getCatalogData();
     const bsaleData = makeBsaleDataAccountForVariations(rawBsaleData, catalogData)
 
-    showDialog(bsaleData)
+    showBsaleDialog(bsaleData)
     // const url = text;
     // El código a partir de esta línea se debe reemplazar por la función que trabaja con la data de BSale 
     // var textResponse = UrlFetchApp.fetch(url, { 'muteHttpExceptions': true }).getContentText();
@@ -61,6 +61,31 @@ function bsaleLink() {
     // User clicked X in the title bar.
     ui.alert('You closed the dialog.');
   }
+}
+
+function showManualLoadDialog() {
+  const html = HtmlService.createTemplateFromFile('ManualLoadForm')
+  const rawCatalogData = getCatalogData();
+  rawCatalogData.shift();
+  // const groupedRaw = Object.groupBy(rawCatalogData, ({ ean }) => ean)
+  // const eanGroupedCatalogData = Object.assign( {}, groupedRaw)
+  // for (let key in eanGroupedCatalogData) {
+  //   if (eanGroupedCatalogData.hasOwnProperty(key)) {
+  //     const hasVariations = eanGroupedCatalogData[key].length > 1
+  //     if (hasVariations) {
+  //       eanGroupedCatalogData[key].shift()
+  //     }
+  //   }
+  // }
+
+  html.data = rawCatalogData
+  // html.data = Object.values(eanGroupedCatalogData)
+
+  const output = html.evaluate()
+    .setWidth(1000)
+    .setHeight(600);
+  SpreadsheetApp.getUi() // Or DocumentApp or SlidesApp or FormApp.
+    .showModalDialog(output, 'Ingreso Manual al inventario de FULL⚡');
 }
 
 function captureSubstring(inputString, startString, endString) {
@@ -234,7 +259,7 @@ function processEntryForm(payloadFromFront) {
     entryMatrix[i] = newRow
   }
 
-  movementsSheet.getRange(rows+1, 1, numberOfRows, columns).setValues(entryMatrix)
+  movementsSheet.getRange(rows + 1, 1, numberOfRows, columns).setValues(entryMatrix)
 }
 
 function debugging() {
