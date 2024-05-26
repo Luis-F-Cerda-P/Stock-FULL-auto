@@ -11,6 +11,90 @@
   function handleFormSubmit(formObject) {
   }
 
+  function assignDependentChange(element = document) {
+    $("select", element).each((index, innerElement) => {
+      $(innerElement).on('change', function () {
+        const origin = innerElement
+        const [field, position] = origin.id.split("-")
+        let target
+
+        if (field == "sku_petporium") {
+          target = "description"
+        } else if (field == "description") {
+          target = "sku_petporium"
+        }
+
+        const selectedValue = origin.value;
+        const targetValue = myData.find(x => x[field] === selectedValue)[target]
+        const targetInput = $('#' + target + '-' + position)[0]
+        const control = targetInput.selectize;
+        control.setValue(targetValue);
+      });
+    })
+  }
+
+  function determineNumberOfRows() {
+    const currentRows = $("tbody tr").length
+
+    return currentRows
+  }
+
+  function addRow() {
+    const currentRows = determineNumberOfRows()
+    if (currentRows === 1) document.getElementById("deleteRow").classList.remove('d-none')
+    const tableBody = $("tbody")[0]
+    const firstRow = $("template")[0].content
+    const newRow = firstRow.cloneNode(true)
+    const skuSelect = newRow.querySelector("[name='sku_petporium']")
+    skuSelect.id = skuSelect.name + "-" + (currentRows + 1)
+    $(skuSelect).selectize({
+      valueField: "sku_petporium",
+      labelField: "sku_petporium",
+      searchField: ["ean", "sku_petporium"],
+      options: myData,
+    })
+    const descriptionSelect = newRow.querySelector("[name='description']")
+    descriptionSelect.id = descriptionSelect.name + "-" + (currentRows + 1)
+    $(descriptionSelect).selectize({
+      valueField: "description",
+      labelField: "description",
+      searchField: "description",
+      options: myData,
+    })
+
+    assignDependentChange(newRow)
+    tableBody.appendChild(newRow)
+  }
+
+  function deleteRow() {
+    const currentRows = determineNumberOfRows
+    if (currentRows === 2) document.getElementById("deleteRow").classList.add('d-none')
+    const tableBody = $("tbody")[0]
+    const lastRow = tableBody.lastElementChild
+    tableBody.removeChild(lastRow)
+  }
+
   window.addEventListener('load', preventFormSubmit);
+
+  document.getElementById("addRow").addEventListener('click', addRow);
+  document.getElementById("deleteRow").addEventListener('click', deleteRow);
+
+  $(document).ready(function () {
+    addRow()
+    $('#sku_petporium-1').selectize({
+      valueField: "sku_petporium",
+      labelField: "sku_petporium",
+      searchField: ["ean", "sku_petporium"],
+      options: myData,
+    });
+    $('#description-1').selectize({
+      valueField: "description",
+      labelField: "description",
+      searchField: "description",
+      options: myData,
+    });
+
+    assignDependentChange();
+  });
 
 </script>
