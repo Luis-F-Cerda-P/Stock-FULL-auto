@@ -8,7 +8,27 @@
     }
   }
 
-  function handleFormSubmit(formObject) {
+  function handleFormSubmit(submitEvent) {
+    const formData = new FormData(submitEvent.target)
+    const formKeys = formData.keys()
+    const payload = {
+      document: {
+        fecha: "01/01/2025",
+        hora: "10:00:01",
+        "nro. factura": "999",
+      }
+    }
+    formKeys.forEach(key => {
+      if (key === "sku_petporium") {
+        payload["sku"] = formData.getAll(key)
+      } else {
+        payload[key] = formData.getAll(key)
+      }
+    })
+
+    console.log(payload)
+
+    google.script.run.processEntryForm(payload);
   }
 
   function assignDependentChange(element = document) {
@@ -78,6 +98,7 @@
 
   document.getElementById("addRow").addEventListener('click', addRow);
   document.getElementById("deleteRow").addEventListener('click', deleteRow);
+  document.getElementById("goods-entry-data").addEventListener('submit', handleFormSubmit);
 
   $(document).ready(function () {
     addRow()

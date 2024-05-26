@@ -44,18 +44,18 @@
   <template>
     <tr>
       <td>
-        <select name="sku_petporium" id="sku_petporium-1">
+        <select name="sku_petporium" id="sku_petporium-1" required>
         </select>
       </td>
       <td>
-        <select name="description" id="description-1">
+        <select name="description" id="description-1" required>
         </select>
       </td>
       <td>
-        <input class="table-number-input form-control" type="number" name="quantity">
+        <input class="table-number-input form-control" type="number" min="1" name="quantity" required>
       </td>
       <td>
-        <input class="table-number-input form-control" type="number" name="net_cost">
+        <input class="table-number-input form-control" type="number" min="1" name="net_cost" required>
       </td>
     </tr>
   </template>
