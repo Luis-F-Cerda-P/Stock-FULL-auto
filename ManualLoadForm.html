@@ -56,30 +56,63 @@
   <script>
     var myData = JSON.parse("<?= JSON.stringify(data) ?>");
     console.log(myData);
-    var getTheOther = function (name) {
-      return function () {
-        console.log(name, arguments);
-      };
-    };
 
-    $(function () {
-      $("[name='barcode']").selectize({
+    $(document).ready(function () {
+      // Initialize Selectize
+      $('#barcode').selectize({
         valueField: "sku_petporium",
-        labelField: "ean",
-        searchField: ["ean", "sku_petporium"],
-        onItemAdd: getTheOther("name"),
-        options: myData
+        labelField: "sku_petporium",
+        options: myData,
+      });
+      $('#description').selectize({
+        valueField: "sku_petporium",
+        labelField: "sku_petporium",
+        options: myData,
+      });
+
+      // Bind a change event to the Selectize input
+      $('#barcode').on('change', function () {
+        // Get the selected value
+        const origin = $(this)
+        console.log(origin)
+        var selectedValue = origin.val();
+        console.log(selectedValue);
+
+        // Update the other input field
+        const descriptionInput = $('#description')[0]
+        console.log(descriptionInput);
+        const control = descriptionInput.selectize;
+        console.log(control)
+        control.setValue(selectedValue);
       });
     });
-    $(function () {
-      $("[name='description']").selectize({
-        valueField: "description",
-        labelField: "description",
-        searchField: "description",
-        onItemAdd: getTheOther("name"),
-        options: myData
-      });
-    });
+
+    // var getTheOther = function (element) {
+    //   return function () {
+    //     console.log(element, arguments)
+    //   };
+    // };
+    // $(function () {
+    //   const barcodeInput = $("[name='barcode']")
+    //   barcodeInput.selectize({
+    //     valueField: "sku_petporium",
+    //     labelField: "ean",
+    //     searchField: ["ean", "sku_petporium"],
+    //     onItemAdd: getTheOther(barcodeInput),
+    //     options: myData
+    //   });
+
+
+    // });
+    // $(function () {
+    //   $("[name='description']").selectize({
+    //     valueField: "description",
+    //     labelField: "description",
+    //     searchField: "description",
+    //     onItemAdd: getTheOther($(this)),
+    //     options: myData
+    //   });
+    // });
 
 
   </script>
